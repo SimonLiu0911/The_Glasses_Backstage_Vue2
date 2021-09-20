@@ -95,7 +95,8 @@ export const vueAjaxSubmit = new Vue({
           }
         })
         .catch(error => {
-          notifyAlert(error.response.data.errors[0], 'danger');
+          console.log(error);
+          // notifyAlert(error.response.data.errors[0], 'danger');
         });
     }
   }
