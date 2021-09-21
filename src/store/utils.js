@@ -98,6 +98,15 @@ export const vueAjaxSubmit = new Vue({
           console.log(error);
           // notifyAlert(error.response.data.errors[0], 'danger');
         });
+    },
+    validateToken() {
+      const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      if (!token) {
+        return false;
+      } else {
+        this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
+        return true;
+      }
     }
   }
 });

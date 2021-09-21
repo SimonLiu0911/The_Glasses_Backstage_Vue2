@@ -3,8 +3,9 @@ import * as utils from '@/store/utils';
 
 export default {
   components: {
-    Layout: () => import('@layout/main')
-    // Productmodal: () => import('./components/Productmodal.vue')
+    Layout: () => import('@layout/main'),
+    ProductModal: () => import('./components/ProductModal'),
+    DelProductModal: () => import('./components/DelProductModal.vue')
   },
   data() {
     return {
@@ -12,62 +13,90 @@ export default {
       pagination: {},
       deleteBtn: '',
       isLoading: false,
-      singleProduct: {}
+      singleProduct: {},
+      modalType: 'new'
     };
   },
   methods: {
     getProductList(num = 1) {
       this.isLoading = true;
-      const config = {
-        method: 'GET',
-        url: `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/admin/ec/products`,
-        param: {
-          page: num
-        }
-      };
-      utils.vueAjaxSubmit.ajaxSubmit(config, response => {
-        this.productList = response.data;
-        this.pagination = response.meta.pagination;
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/admin/ec/products?page=${num}`;
+      this.$http.get(url).then((response) => {
+        this.productList = response.data.data;
+        this.pagination = response.data.meta.pagination;
+        // if (this.tempProduct.id) {
+        //   this.tempProduct = {
+        //     imageUrl: []
+        //   };
+        // window.$('#productModal').modal('hide');
+        // }
         this.isLoading = false;
       });
+      // const config = {
+      //   method: 'GET',
+      //   url: `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/admin/ec/products`,
+      //   param: {
+      //     page: num
+      //   }
+      // };
+      // utils.vueAjaxSubmit.ajaxSubmit(config, response => {
+      //   this.productList = response.data;
+      //   this.pagination = response.meta.pagination;
+      //   console.log(this.pagination);
+      //   this.isLoading = false;
+      // });
     },
     onSignOut() {
       document.cookie = 'myToken=;expires=;';
-      // this.$router.push('/login');
+      this.$router.push({ name: 'Login' });
     },
-    onOpenProductModal(isNew, item) {
-      // const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/admin/ec/product/${item.id}`;
-      switch (isNew) {
+    onOpenProductModal(type, item) {
+      switch (type) {
         case 'new':
-          console.log('new');
-          window.$('#productModal').modal('show');
+          this.modalType = 'new';
           break;
         case 'edit':
-          console.log('edit');
-          // this.lockingBtn = item.id;
-          // this.$http.get(url).then((response) => {
-          //   this.singleProduct = response.data.data;
-          //   $('#productModal').modal('show');
-          // });
+          this.modalType = 'edit';
+          this.singleProduct = item;
           break;
         case 'delete':
-          console.log('delete');
-          // this.deleteBtn = item.id;
-          // $('#delProductModal').modal('show');
-          // this.singleProduct = { ...item };
+          this.modalType = 'delete';
+          this.singleProduct = item;
           break;
         default:
           break;
       }
     },
-    onPatchItem() {
-      console.log('onPatchItem');
+    onPatchItem(item) {
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/admin/ec/product/${item.id}`;
+      this.$http
+        .patch(url, {
+          enabled: !item.enabled
+        })
+        .then((response) => {
+          console.log(response.data.data.enabled);
+        });
     }
   },
   created() {
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
-    this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
-    this.getProductList();
+    // TODO
+    // // POST api/auth/check
+    // const url = `${process.env.VUE_APP_APIPATH}/api/auth/check`;
+    // const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
+    // console.log(document.cookie);
+    // this.$http.post(url, token)
+    //   .then(response => {
+    //     console.log(response);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
+    // utils.vueAjaxSubmit.validateToken();
+    if (utils.vueAjaxSubmit.validateToken()) {
+      this.getProductList();
+    } else {
+      this.$router.push({ name: 'Login' });
+    }
   }
 };
 </script>
@@ -81,6 +110,7 @@ export default {
             class="btn btn-outline-dark rounded-0 float-right"
             type="button"
             @click="onOpenProductModal('new', 0)"
+            data-toggle="modal" data-target="#productModal"
           >
             NEW PRODUCT
           </button>
@@ -126,6 +156,8 @@ export default {
                   <BaseButton
                     class="btn btn-outline-dark btn-sm rounded-0"
                     @click="onOpenProductModal('edit', item)"
+                    data-toggle="modal"
+                    data-target="#productModal"
                   >
                     Edit
                   </BaseButton>
@@ -133,6 +165,8 @@ export default {
                     class="btn btn-outline-danger btn-sm rounded-0"
                     @click="onOpenProductModal('delete', item)"
                     :disabled="deleteBtn === item.id"
+                    data-toggle="modal"
+                    data-target="#delProductModal"
                   >
                     <span
                       class="spinner-border spinner-border-sm"
@@ -152,7 +186,15 @@ export default {
         <Loading :active.sync="this.isLoading"></Loading>
 
         <!-- Pagination -->
-        <!-- <BasePagination :pages="pagination" @update="getProducts"></BasePagination> -->
+        <BasePagination :pages="pagination" @update="getProductList"></BasePagination>
+
+        <!-- Modal -->
+        <ProductModal
+          :single-product="singleProduct"
+          :modal-type="modalType"
+          @update="getProductList"
+        ></ProductModal>
+        <DelProductModal @update="getProductList" :single-product="singleProduct"></DelProductModal>
       </div>
     </section>
   </Layout>
