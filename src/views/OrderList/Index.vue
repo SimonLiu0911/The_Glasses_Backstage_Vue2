@@ -13,11 +13,11 @@ export default {
     };
   },
   methods: {
-    onSignOut() {
-      // 清除Token
-      document.cookie = 'myToken=;expires=;';
-      this.$router.push({ name: 'Login' });
-    },
+    // onSignOut() {
+    //   // 清除Token
+    //   document.cookie = 'myToken=;expires=;';
+    //   this.$router.push({ name: 'Login' });
+    // },
     getOrderData(num = 1) {
       this.isLoading = true;
       const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/ec/orders`;
@@ -37,16 +37,21 @@ export default {
     }
   },
   created() {
-    this.getOrderData();
+    // TODO 優化
+    if (utils.vueAjaxSubmit.validateToken()) {
+      this.getOrderData();
+    } else {
+      this.$router.push({ name: 'Login' });
+    }
   }
 };
 </script>
 
 <template>
   <Layout>
-    <section id="orderList">
+    <section id="orderList" class="mt-5">
       <div class="orders_management container">
-        <div class="mt-5 clearfix">
+        <!-- <div class="mt-5">
           <BaseButton
             class="btn btn-dark rounded-0 float-left"
             type="button"
@@ -54,7 +59,7 @@ export default {
           >
             SIGN OUT
           </BaseButton>
-        </div>
+        </div> -->
         <table class="table table-responsive-xl mt-3">
           <thead>
             <tr class="text-center">

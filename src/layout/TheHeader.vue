@@ -19,7 +19,11 @@ export default {
       currentPage: this.$route.name
     };
   },
-  mounted() {
+  methods: {
+    onSignOut() {
+      document.cookie = 'myToken=;expires=;';
+      this.$router.push({ name: 'Login' });
+    }
   }
 };
 </script>
@@ -50,6 +54,15 @@ export default {
           >
             <BaseButton class="nav-link" :to="{ name:menu.alias }">
               {{ menu.name }}
+            </BaseButton>
+          </li>
+          <li class="nav-item mr-2 ml-2">
+            <BaseButton
+              class="nav-link"
+              href="javascript:;"
+              @click="onSignOut"
+            >
+              SIGN OUT
             </BaseButton>
           </li>
         </ul>

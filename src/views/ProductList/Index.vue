@@ -28,32 +28,13 @@ export default {
       }).then((response) => {
         this.productList = response.data.data;
         this.pagination = response.data.meta.pagination;
-        // if (this.tempProduct.id) {
-        //   this.tempProduct = {
-        //     imageUrl: []
-        //   };
-        // window.$('#productModal').modal('hide');
-        // }
         this.isLoading = false;
       });
-      // const config = {
-      //   method: 'GET',
-      //   url: `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/admin/ec/products`,
-      //   param: {
-      //     page: num
-      //   }
-      // };
-      // utils.vueAjaxSubmit.ajaxSubmit(config, response => {
-      //   this.productList = response.data;
-      //   this.pagination = response.meta.pagination;
-      //   console.log(this.pagination);
-      //   this.isLoading = false;
-      // });
     },
-    onSignOut() {
-      document.cookie = 'myToken=;expires=;';
-      this.$router.push({ name: 'Login' });
-    },
+    // onSignOut() {
+    //   document.cookie = 'myToken=;expires=;';
+    //   this.$router.push({ name: 'Login' });
+    // },
     onOpenProductModal(type, item) {
       switch (type) {
         case 'new':
@@ -83,7 +64,7 @@ export default {
     }
   },
   created() {
-    // TODO 登出後Token仍在？
+    // TODO 優化
     // // POST api/auth/check
     // const url = `${process.env.VUE_APP_APIPATH}/api/auth/check`;
     // const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
@@ -96,7 +77,6 @@ export default {
     //     console.log(error);
     //   });
     // utils.vueAjaxSubmit.validateToken();
-    console.log(utils.vueAjaxSubmit.validateToken());
     if (utils.vueAjaxSubmit.validateToken()) {
       this.getProductList();
     } else {
@@ -111,21 +91,21 @@ export default {
     <section class="productsmanagement">
       <div class="container">
         <div class="mt-5 clearfix">
-          <button
+          <BaseButton
             class="btn btn-outline-dark rounded-0 float-right"
             type="button"
             @click="onOpenProductModal('new', 0)"
             data-toggle="modal" data-target="#productModal"
           >
             NEW PRODUCT
-          </button>
-          <button
+          </BaseButton>
+          <!-- <BaseButton
             class="btn btn-dark rounded-0 float-left"
             type="button"
             @click="onSignOut"
           >
-            SIGN OUT
-          </button>
+             SIGN OUT
+          </BaseButton> -->
         </div>
         <table class="table table-responsive-xl mt-3">
           <thead>

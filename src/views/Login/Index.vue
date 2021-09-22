@@ -45,7 +45,6 @@ export default {
     <div class="container">
       <div class="row">
         <div class="col-md-6 m-auto">
-          <keep-alive>
             <form class="form-signin p-3 m-auto" @submit.prevent="signIn">
               <h1 class="h3 mb-3 font-weight-normal text-center">Sign in</h1>
               <div class="form-group">
@@ -71,20 +70,19 @@ export default {
                   v-model="user.password"
                 />
               </div>
-              <button
+              <BaseButton
                 class="btn btn-lg btn-dark btn-block rounded-0"
                 type="submit"
               >
                 Sign In
-              </button>
-              <button
+              </BaseButton>
+              <!-- <button
                 class="btn btn-lg btn-outline-dark btn-block rounded-0"
                 type="submit"
               >
                 Go Back to Front Page
-              </button>
+              </button> -->
             </form>
-          </keep-alive>
           <TheFooter></TheFooter>
         </div>
       </div>

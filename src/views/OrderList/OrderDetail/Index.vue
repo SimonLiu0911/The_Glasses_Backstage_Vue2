@@ -1,4 +1,6 @@
 <script>
+import * as utils from '@/store/utils';
+
 export default {
   components: {
     Layout: () => import('@layout/main')
@@ -14,7 +16,7 @@ export default {
     };
   },
   methods: {
-    getorderUser() {
+    getOrderUser() {
       this.isLoading = true;
       this.orderId = this.$route.params.id;
       const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/ec/orders/${this.orderId}`;
@@ -28,8 +30,12 @@ export default {
     }
   },
   created() {
-    console.log(1);
-    this.getorderUser();
+    // TODO 優化
+    if (utils.vueAjaxSubmit.validateToken()) {
+      this.getOrderUser();
+    } else {
+      this.$router.push({ name: 'Login' });
+    }
   }
 };
 </script>
