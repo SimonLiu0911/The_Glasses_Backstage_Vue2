@@ -57,7 +57,6 @@ export default {
   },
   methods: {
     updatePage(num) {
-      console.log(num);
       this.$emit('update', num);
     }
   }

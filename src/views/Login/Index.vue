@@ -20,13 +20,11 @@ export default {
       this.$http
         .post(url, this.user)
         .then((response) => {
-          console.log(response);
           const { token, expired } = response.data;
           // 伺服器回傳token和expired後，將其存到cookie裡面
           document.cookie = `myToken=${token}; expires=${new Date(
             expired * 1000
           )}; path=/`;
-          console.log(document.cookie);
           this.$router.push({ name: 'ProductList' });
         })
         // milkjhang@hotmail.com

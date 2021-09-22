@@ -62,7 +62,6 @@ export default {
         })
         .catch(error => {
           this.isLoading = false;
-          console.log(error.errors.message);
           utils.notifyAlert(error.errors.message, 'danger');
         });
     }
