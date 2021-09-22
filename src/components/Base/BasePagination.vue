@@ -38,6 +38,10 @@
 </template>
 
 <script>
+/**
+ * @param {*} pages 傳進來的pagination
+ * 用 update 傳出去更新table
+ */
 export default {
   data() {
     return {};

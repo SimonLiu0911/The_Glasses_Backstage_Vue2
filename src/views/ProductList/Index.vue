@@ -20,8 +20,12 @@ export default {
   methods: {
     getProductList(num = 1) {
       this.isLoading = true;
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/admin/ec/products?page=${num}`;
-      this.$http.get(url).then((response) => {
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_UUID}/admin/ec/products`;
+      this.$http.get(url, {
+        params: {
+          page: num
+        }
+      }).then((response) => {
         this.productList = response.data.data;
         this.pagination = response.data.meta.pagination;
         // if (this.tempProduct.id) {
@@ -79,7 +83,7 @@ export default {
     }
   },
   created() {
-    // TODO
+    // TODO 登出後Token仍在？
     // // POST api/auth/check
     // const url = `${process.env.VUE_APP_APIPATH}/api/auth/check`;
     // const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
@@ -92,6 +96,7 @@ export default {
     //     console.log(error);
     //   });
     // utils.vueAjaxSubmit.validateToken();
+    console.log(utils.vueAjaxSubmit.validateToken());
     if (utils.vueAjaxSubmit.validateToken()) {
       this.getProductList();
     } else {

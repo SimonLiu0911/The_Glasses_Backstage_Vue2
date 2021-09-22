@@ -3,7 +3,6 @@ import * as utils from '@/store/utils';
 
 export default {
   components: {
-    // Layout: () => import('@layout/main')
     TheFooter: () => import('@layout/TheFooter')
   },
   data() {
@@ -35,19 +34,6 @@ export default {
           utils.notifyAlert('Failed to Sign in');
           window.location.reload();
         });
-      // const config = {
-      //   method: 'POST',
-      //   url: `${process.env.VUE_APP_APIPATH}/api/auth/login`,
-      //   param: {
-      //     email: this.user.email,
-      //     password: this.user.password
-      //   }
-      // };
-      // utils.vueAjaxSubmit.ajaxSubmit(config, response => {
-      //   console.log(response);
-      // });
-      // utils.notifyAlert('Success to sign in!', 'success');
-      // console.log('signIn');
     }
   }
 };
@@ -58,7 +44,7 @@ export default {
   <div id="login">
     <div class="container">
       <div class="row">
-        <div class="col-4 m-auto">
+        <div class="col-md-6 m-auto">
           <keep-alive>
             <form class="form-signin p-3 m-auto" @submit.prevent="signIn">
               <h1 class="h3 mb-3 font-weight-normal text-center">Sign in</h1>

@@ -21,6 +21,11 @@ const routes = [
     component: () => lazyLoadView(import('@/views/OrderList/Index'))
   },
   {
+    path: '/order-detail/:id',
+    name: 'OrderDetail',
+    component: () => lazyLoadView(import('@/views/OrderList/OrderDetail/Index'))
+  },
+  {
     path: '/coupon-list',
     name: 'CouponList',
     component: () => lazyLoadView(import('@/views/CouponList/Index'))
