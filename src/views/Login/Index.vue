@@ -30,7 +30,7 @@ export default {
         // milkjhang@hotmail.com
         .catch(() => {
           utils.notifyAlert('Failed to Sign in');
-          window.location.reload();
+          // window.location.reload();
         });
     }
   }
