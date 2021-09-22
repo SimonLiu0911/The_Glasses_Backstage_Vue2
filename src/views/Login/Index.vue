@@ -27,7 +27,6 @@ export default {
           )}; path=/`;
           this.$router.push({ name: 'ProductList' });
         })
-        // milkjhang@hotmail.com
         .catch(() => {
           utils.notifyAlert('Failed to Sign in');
           // window.location.reload();
